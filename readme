@@ -1,0 +1,18 @@
+w4118 Homework 1 Readme
+Hanlong Chen, hc2596
+
+The shell functions by reading in user input as a string which is parsed using
+strtok. It is assumed that all arguments are separated by whitespace. It then
+either executes cd, pushd, popd, dirs or path if the first argument matches one
+of those strings exactly. Otherwise it will try to execute it as a file using
+execv. Both the pushd/popd and the path functions use stacks, one for each. They
+are composed of singly linked structs with a character array pointer. The path
+command adds a '/' to the end of each of the paths if the last character is not
+a '/' before adding it to the stack. Paths are not checked for existence when
+they are added to the stack, but bad paths will not cause exec to crash when it
+iterates over all the paths. The shell has been tested extensively and a sample
+of the input/output for the shell is in this directory. To the best of my
+knowledge, the shell works as specified.
+
+Note: Program has limit on maximum input size and maximum number of arguments.
+I did not have time to implement infinite input size.

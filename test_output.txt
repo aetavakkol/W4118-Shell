@@ -1,0 +1,120 @@
+SHELL STARTED:
+>> dirs
+cwd: /home/w4118/hmwk1/shell
+>> cd ..
+ > /home/w4118/hmwk1
+>> cd ../../../
+ > /
+>> cd home/w4118
+ > /home/w4118
+>> pushd
+ERROR: path required
+>> pushd aaaaaaaaa
+ERROR: invalid path
+>> dirs
+cwd: /home/w4118
+>> pushd hmwk1/shell
+ > /home/w4118/hmwk1/shell
+>> dirs
+cwd: /home/w4118/hmwk1/shell
+ > /home/w4118
+>> popd
+ > /home/w4118
+>> popd
+ERROR: stack is empty
+>> pushd ../..
+ > /
+>> pushd home/w4118/hmwk1/shell
+ > /home/w4118/hmwk1/shell
+>> pushd ..
+ > /home/w4118/hmwk1
+>> cd ..
+ > /home/w4118
+>> dirs
+cwd: /home/w4118
+ > /home/w4118/hmwk1/shell
+ > /
+ > /home/w4118
+>> popd
+ > /home/w4118/hmwk1/shell
+>> dirs
+cwd: /home/w4118/hmwk1/shell
+ > /
+ > /home/w4118
+>> popd
+ > /
+>> dirs
+cwd: /
+ > /home/w4118
+>> popd
+ > /home/w4118
+>> dirs
+cwd: /home/w4118
+>> popd
+ERROR: stack is empty
+>> path
+ > 
+>> path aaa
+ERROR: bad flag: aa
+>> path +
+ERROR: path required
+>> path -
+ERROR: path required
+>> path + a
+>> path + bb
+>> path + ccc
+>> path
+ > ccc/:bb/:a/
+>> path - bb
+>> path
+ > ccc/:a/
+>> path - a
+>> path
+ > ccc/
+>> path - ccc
+>> path
+ > 
+>> path - aaaaaa
+ERROR: path not found
+>> path + /home/w4118/hmwk1/shell
+>> path
+ > /home/w4118/hmwk1/shell/
+>> pushd hmwk1/shell
+ > /home/w4118/hmwk1/shell
+>> path + /home/w4118/hmwk1/shell
+ERROR: path already present
+>> path + /home/w4118/hmwk1/shell/
+ERROR: path already present
+>> dirs
+cwd: /home/w4118/hmwk1/shell
+ > /home/w4118
+>> ./w4118_sh
+SHELL STARTED:
+>> path
+ > 
+>> dirs
+cwd: /home/w4118
+>> exit
+EXITING SHELL...
+>> cd ../../../..
+ > /
+>> dirs
+cwd: /
+ > /home/w4118
+>> path + blahblahblah
+>> path
+ > blahblahblah/:/home/w4118/hmwk1/shell
+>> w4118_sh
+SHELL STARTED:
+>> w4118_sh
+SHELL STARTED:
+>> w4118_sh
+SHELL STARTED:
+>> exit
+EXITING SHELL...
+>> exit
+EXITING SHELL...
+>> exit
+EXITING SHELL...
+>> exit
+EXITING SHELL...

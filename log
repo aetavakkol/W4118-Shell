@@ -1,0 +1,552 @@
+
+
+
+*****************************************************************
+*********                   Test 1                     *********
+Checking for shell/ source dir, Makefile, style, compilation
+*****************************************************************
+
+Checking for source directory:
+------------------------------
+OK: source directory exists
+
+
+Looking for Makefile:
+---------------------
+OK: Makefile found!
+
+
+Running checkpatch:
+-------------------
+total: 0 errors, 0 warnings, 277 lines checked
+
+/home/w4118/students/hc2596/hmwk1/shell/shell.c has no obvious style problems and is ready for submission.
+
+
+Compiling:
+----------
+	GCC Version:  gcc (Debian 4.3.2-1.1) 4.3.2 Copyright (C) 2008 Free Software Foundation, Inc. This is free software; see the source for copying conditions. There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+	
+make: Entering directory `/home/w4118/students/hc2596/hmwk1/shell'
+gcc -Wall  -c shell.c
+gcc -Wall   -o w4118_sh shell.o
+make: Leaving directory `/home/w4118/students/hc2596/hmwk1/shell'
+
+
+
+*****************************************************************
+*********                   Test 2                     *********
+Test 100 input arguments
+*****************************************************************
+
+Input command:
+--------------
+path + /home/w4118/hmwk1-soln
+sum.sh 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 + 15 + 16 + 17 + 18 + 19 + 20 + 21 + 22 + 23 + 24 + 25 + 26 + 27 + 28 + 29 + 30 + 31 + 32 + 33 + 34 + 35 + 36 + 37 + 38 + 39 + 40 + 41 + 42 + 43 + 44 + 45 + 46 + 47 + 48 + 49 + 50
+exit
+
+
+Output:
+-------
+SHELL STARTED:
+6
+>> >> >> EXITING SHELL...
+
+
+
+*****************************************************************
+*********                   Test 3                     *********
+Input arguments white space handling
+*****************************************************************
+
+Input command:
+--------------
+path + /home/w4118/hmwk1-soln
+sum.sh 1 + 2 + 3 + 4
+sum.sh        1    +    4 +         2     +     3
+exit
+
+
+Output:
+-------
+SHELL STARTED:
+6
+7
+>> >> >> >> EXITING SHELL...
+
+
+
+*****************************************************************
+*********                   Test 4                     *********
+Path empty by default
+*****************************************************************
+
+Input command:
+--------------
+path
+exit
+
+
+Output:
+-------
+SHELL STARTED:
+>>  > 
+>> EXITING SHELL...
+
+
+
+*****************************************************************
+*********                   Test 5                     *********
+Removing path from empty path should not fail
+*****************************************************************
+
+Input command:
+--------------
+path - .
+path
+exit
+
+
+Output:
+-------
+SHELL STARTED:
+ERROR: path not found
+>> >>  > 
+>> EXITING SHELL...
+
+
+
+*****************************************************************
+*********                   Test 6                     *********
+Add path twice, should remove path twice
+*****************************************************************
+
+Input command:
+--------------
+path + /usr/local/bin
+path + /usr/local/bin
+path - /usr/local/bin
+path - /usr/local/bin
+path
+exit
+
+
+Output:
+-------
+SHELL STARTED:
+ERROR: path already present
+ERROR: path not found
+>> >> >> >> >>  > 
+>> EXITING SHELL...
+
+
+
+*****************************************************************
+*********                   Test 7                     *********
+Add 10 paths, remove them, path should contain only /etc
+*****************************************************************
+
+Input command:
+--------------
+path + /usr
+path + /usr/bin
+path + /usr/games
+path + /usr/lib
+path + /usr/lib/groff
+path + /usr/lib/groff/site-tmac
+path + /usr/lib/grub-legacy
+path + /usr/lib/i486-linux-gnu
+path + /usr/src
+path + /usr/X11R6
+path + /etc
+path - /usr/X11R6
+path - /usr/src
+path - /usr/lib/i486-linux-gnu
+path - /usr/lib/grub-legacy
+path - /usr/lib/groff/site-tmac
+path - /usr/lib/groff
+path - /usr/lib
+path - /usr/games
+path - /usr/bin
+path - /usr
+path
+exit
+
+
+Output:
+-------
+SHELL STARTED:
+>> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >>  > /etc/
+>> EXITING SHELL...
+
+
+
+*****************************************************************
+*********                   Test 8                     *********
+Remove non-existing path - should give error
+*****************************************************************
+
+Input command:
+--------------
+path - /usr/local/bin
+path - /not_existing
+path
+exit
+
+
+Output:
+-------
+SHELL STARTED:
+ERROR: path not found
+ERROR: path not found
+>> >> >>  > 
+>> EXITING SHELL...
+
+
+
+*****************************************************************
+*********                   Test 9                     *********
+Test that is searched correctly (not current dir)
+*****************************************************************
+
+This can either output (the specs are unclear):
+    -c uname
+    Linux
+or
+    Linux
+    Linux
+
+
+Input command:
+--------------
+path + /bin
+path + /usr/bin
+path
+ln -f -s /bin/echo /tmp/sh
+cd /tmp
+sh -c uname
+cd /
+sh -c uname
+exit
+
+
+Output:
+-------
+SHELL STARTED:
+>> >> >>  > /usr/bin/:/bin/
+>> >>  > /tmp
+-c uname
+>> >>  > /
+Linux
+>> >> EXITING SHELL...
+
+
+
+*****************************************************************
+*********                   Test 10                     *********
+Test for bogus arguments
+*****************************************************************
+
+Input command:
+--------------
+cd /etc
+path + /bin
+path / /
+cd /usr /tmp
+pwd
+popd 1
+exit
+
+
+Output:
+-------
+SHELL STARTED:
+>>  > /etc
+ERROR: bad flag: /
+>> >> >>  > /usr
+/usr
+ERROR: stack is empty
+>> >> >> EXITING SHELL...
+
+
+
+*****************************************************************
+*********                   Test 11                     *********
+Testing 'dirs' command
+*****************************************************************
+
+Expected:
+    /tmp
+    /etc /bin /
+    /usr
+    /tmp
+
+
+Input command:
+--------------
+cd /tmp
+path + /bin
+pwd
+pushd /bin
+pushd /etc
+pushd /usr
+dirs
+popd
+popd
+pwd
+popd
+pwd
+exit
+
+
+Output:
+-------
+SHELL STARTED:
+>>  > /tmp
+/tmp
+>> >> >>  > /bin
+>>  > /etc
+>>  > /usr
+>> cwd: /usr
+ > /etc
+ > /bin
+ > /tmp
+>>  > /etc
+>>  > /bin
+/bin
+>> >>  > /tmp
+/tmp
+>> >> EXITING SHELL...
+
+
+
+*****************************************************************
+*********                   Test 12                     *********
+Test dirs when path doesn't exist
+*****************************************************************
+
+Input command:
+--------------
+pushd /OOPS
+dirs
+exit
+
+
+Output:
+-------
+SHELL STARTED:
+ERROR: invalid path
+>> >> cwd: /home/w4118/hmwk1-soln
+>> EXITING SHELL...
+
+
+
+*****************************************************************
+*********                   Test 13                     *********
+Dirs when directory gets removed (should not crash)
+*****************************************************************
+
+Input command:
+--------------
+path + /bin
+mkdir removed
+cd removed
+rm -r ../removed
+pushd /
+popd
+dirs
+exit
+
+
+Output:
+-------
+SHELL STARTED:
+/bin/mkdir: cannot create directory `removed': File exists
+>> >> >>  > /home/w4118/hmwk1-soln/removed
+>> >>  > /
+ERROR: invalid path
+>> >> cwd: /
+>> EXITING SHELL...
+
+
+
+*****************************************************************
+*********                   Test 14                     *********
+Dirs with . and .. (should end in /usr/local/bin)
+*****************************************************************
+
+Input command:
+--------------
+path + /bin
+cd /usr/local/bin
+pushd ../../lib
+pushd .
+cd /tmp
+popd
+pwd
+popd
+pwd
+exit
+
+
+Output:
+-------
+SHELL STARTED:
+>> >>  > /usr/local/bin
+>>  > /usr/lib
+>>  > /usr/lib
+>>  > /tmp
+>>  > /usr/lib
+/usr/lib
+>> >>  > /usr/local/bin
+/usr/local/bin
+>> >> EXITING SHELL...
+
+
+
+*****************************************************************
+*********                   Test 15                     *********
+Test popd on empty (should complain twice)
+*****************************************************************
+
+Input command:
+--------------
+popd
+pushd /tmp
+popd
+popd
+exit
+
+
+Output:
+-------
+SHELL STARTED:
+ERROR: stack is empty
+>> >>  > /tmp
+>>  > /home/w4118/hmwk1-soln
+ERROR: stack is empty
+>> >> EXITING SHELL...
+
+
+
+*****************************************************************
+*********                   Test 16                     *********
+Test for exit
+*****************************************************************
+
+Input command:
+--------------
+exit
+
+
+Output:
+-------
+SHELL STARTED:
+>> EXITING SHELL...
+
+
+
+*****************************************************************
+*********                   Test 17                     *********
+Command line input size (should error but not crash)
+*****************************************************************
+
+Expects no crashes, but can error
+
+
+Error output:
+-------------
+$ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ $ 
+
+
+*****************************************************************
+*********                   Test 18                     *********
+Test really long path commands (should error but not crash)
+*****************************************************************
+
+Truncated output (expects /usr/bin:/bin:/tmp):
+----------------------------------------------
+> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >>  > /tmp/:/bin/:/usr/bin/:////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+>> EXITING SHELL...
+
+
+Error output:
+-------------
+
+ERROR: unknown command
+ERROR: unknown command
+ERROR: unknown command
+ERROR: unknown command
+ERROR: unknown command
+ERROR: unknown command
+ERROR: unknown command
+ERROR: unknown command
+ERROR: unknown command
+ERROR: unknown command
+ERROR: unknown command
+ERROR: unknown command
+ERROR: unknown command
+
+
+
+*****************************************************************
+*********                   Test 19                     *********
+Test cd to non-existing path
+*****************************************************************
+
+Input command:
+--------------
+cd /non_existing
+exit
+
+
+Output:
+-------
+SHELL STARTED:
+ERROR: invalid path
+>> >> EXITING SHELL...
+
+
+
+*****************************************************************
+*********                   Test 20                     *********
+Test for dirs depth (should not error and dirs should be clean)
+*****************************************************************
+
+Truncated output (expected empty):
+----------------------------------
+>> >> >> cwd: /home/w4118/hmwk1-soln
+>> EXITING SHELL...
+
+
+Error output:
+-------------
+
+
+
+*****************************************************************
+*********                   Test 21                     *********
+Test for path depth
+*****************************************************************
+
+Truncated output (expected /etc:/bin):
+--------------------------------------
+ >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >>  > /bin/:/etc/
+>> EXITING SHELL...
+> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >>  > /bin/:/etc/
+>> EXITING SHELL...
+
+
+Error output:
+-------------
+
+
+
+*****************************************************************
+*********                   Test 22                     *********
+Test for EOF handling
+*****************************************************************
+
+ERROR: TImed out!
